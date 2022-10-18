@@ -1,0 +1,11 @@
+.navbar-brand img{
+    min-width: 7rem;
+    max-width: 7rem;
+}
+.bg-dark {
+    background-color: white !important;
+}
+.navbar a{
+    color: #1d2124 !important;
+    cursor: pointer !important;
+}

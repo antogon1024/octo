@@ -15,27 +15,17 @@ use yii\web\AssetBundle;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class AppAsset extends AssetBundle
+class GeneratorAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/site.css',
+        'css/generator.css',
     ];
     public $js = [
     ];
     public $depends = [
-        //'yii\web\YiiAsset',
-        //'yii\bootstrap4\BootstrapAsset',
+        'yii\web\YiiAsset',
+        'yii\bootstrap4\BootstrapAsset',
     ];
-
-    /*public function init()
-    {
-        parent::init();
-        // resetting BootstrapAsset to not load own css files
-        \Yii::$app->assetManager->bundles['yii\\bootstrap\\BootstrapAsset'] = [
-            'css' => [],
-            'js' => []
-        ];
-    }*/
 }

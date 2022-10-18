@@ -1,0 +1,76 @@
+.img-fluid{
+    width: 100%;
+}
+.justify-content-between {
+    -ms-flex-pack: justify !important;
+    justify-content: space-between !important;
+}
+.row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+.col {
+    -ms-flex-preferred-size: 0;
+    flex-basis: 0;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    max-width: 100%;
+}
+.display-4 {
+    font-size: 1.75rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+.list-checked-primary .list-checked-item::before {
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='9' viewBox='0 0 100 90' fill='%23377dff' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M98.1,16.2c-2.5-2.3-6.4-2.2-8.7,0.2L36.7,70.1l-13-15.5c-2.9-3.5-7.9-4.1-11.1-1.4c-2.9,2.4-3.5,6.6-1.4,10.1l16.5,28c3.2,5.4,10.8,5.8,14.5,0.8l56.5-67.3C100.7,22.1,100.4,18.5,98.1,16.2z'/%3E%3C/svg%3E%0A");
+}
+.list-checked-item {
+    position: relative;
+    display: block;
+    color: #677788;
+    padding-left: 1.75rem;
+    margin: .5rem;
+}
+.list-checked-item::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1rem;
+    height: 1rem;
+    background: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 110 110' fill='%2371869d' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M98.1,16.2c-2.5-2.3-6.4-2.2-8.7,0.2L36.7,70.1l-13-15.5c-2.9-3.5-7.9-4.1-11.1-1.4c-2.9,2.4-3.5,6.6-1.4,10.1l16.5,28c3.2,5.4,10.8,5.8,14.5,0.8l56.5-67.3C100.7,22.1,100.4,18.5,98.1,16.2z'/%3E%3C/svg%3E%0A") no-repeat right center/1rem 1rem;
+    content: "";
+    margin-top: .125rem;
+}
+.form-group {
+    margin-bottom: 2rem;
+}
+.form-control {
+    display: block;
+    width: 100%;
+    height: calc(1.6em + 1.21875rem);
+    padding: .54688rem .875rem;
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #1e2022;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: .0625rem solid #e7eaf3;
+    border-radius: .3125rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.navbar-brand img{
+    min-width: 7rem;
+    max-width: 7rem;
+}
+.bg-dark {
+    background-color: white !important;
+}
+.navbar a{
+    color: #1d2124 !important;
+    cursor: pointer !important;
+}

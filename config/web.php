@@ -5,11 +5,31 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'language' => 'ru-RU',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'defaultRoute' => 'generator/index',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+    ],
+    'modules' => [
+        'user' => [
+            'class' => Da\User\Module::class,
+            // ...other configs from here: [Configuration Options](installation/configuration-options.md), e.g.
+            'administrators' => ['admin'], // this is required for accessing administrative actions
+            'enableEmailConfirmation' => false,
+            'mailParams' => [
+                'fromEmail' => 'info@octo.bz',
+            ],
+            'controllerMap' => [
+                'security' => 'app\controllers\SecurityController',
+                'registration' => 'app\controllers\RegistrationController'
+            ],
+            //'layout' => '@app/modules/admin/views/layouts/main',
+            'layout' => '@app/views/layouts/login',
+            'viewPath' => '@app/views/user'
+        ],
     ],
     'components' => [
         'request' => [
@@ -20,12 +40,8 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-        'user' => [
-            'identityClass' => 'app\models\User',
-            'enableAutoLogin' => true,
-        ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'generator/error',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -43,12 +59,23 @@ $config = [
                 ],
             ],
         ],
+
         'db' => $db,
 
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '<action:(login)>' => 'user/security/<action>',
+                'login' => 'security/login',
+
+                '<action:(register)>' => 'user/registration/<action>',
+                'register' => 'registration/register',
+
+                'forgot' => 'user/recovery/request',
+                'logout' => 'generator/logout',
+
+                'generator' => 'generator/create-page',
             ],
         ],
 
