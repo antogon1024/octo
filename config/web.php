@@ -24,9 +24,9 @@ $config = [
             ],
             'controllerMap' => [
                 'security' => 'app\controllers\SecurityController',
-                'registration' => 'app\controllers\RegistrationController'
+                'registration' => 'app\controllers\RegistrationController',
             ],
-            //'layout' => '@app/modules/admin/views/layouts/main',
+
             'layout' => '@app/views/layouts/login',
             'viewPath' => '@app/views/user'
         ],
