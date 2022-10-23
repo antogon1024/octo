@@ -21,8 +21,10 @@ class GeneratorAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/generator.css',
+        //'css/font-awesome.min.css',
     ];
     public $js = [
+        'js/generator.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
