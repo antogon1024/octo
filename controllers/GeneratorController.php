@@ -41,7 +41,13 @@ class GeneratorController extends Controller
 
     public function actionCreatePage()
     {
-        return $this->render('create-page');
+        $header = '/web/img/header.jpg';
+        $avatar = '/web/img/user.jpg';
+
+        return $this->render('create-page', [
+            'header' => $header,
+            'avatar' => $avatar,
+        ]);
     }
 
 }

@@ -21,6 +21,7 @@ class GeneratorAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/generator.css',
+        //'css/theme.min.css',
         //'css/font-awesome.min.css',
     ];
     public $js = [

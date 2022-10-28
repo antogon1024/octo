@@ -16,12 +16,10 @@
 .sidebar .nav-link:hover {
     color: #0052ea;
 }
-
 .nav-header{
     color: #8c98a4;
     padding: 0.5rem 0rem;
 }
-
 .sidebar .nav-item {
     background: #cccccc;
     padding-left: 2px;
@@ -33,7 +31,6 @@
 .sidebar .nav-item:hover {
     cursor: pointer;
 }
-
 .sidebar .nav-link {
     background: white;
     border-radius: 10px;
@@ -51,9 +48,7 @@
     padding: 0 16px;
     text-decoration: none;
 }
-/*hover color: #007bff;*/
-
-
+/*color: #007bff;*/
 .sidebar .label{
     margin: 0;
     font-size: 18px;
@@ -71,4 +66,91 @@
     margin-bottom: 16px;
     color: #cccccc;
 }
+/*header*/
+.wrap-header{
+    position: relative;
+    width:100%;
+}
+.img-header{
+    width: 100%;
+    height: 160px;
+    border-radius: .75rem
+}
+.input-header{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: -1;
+    visibility: hidden;
+}
+.label-header{
+    cursor:pointer;
+    position:absolute;
+    top:105px;
+    right:30px;
+    background:white;
+    padding:7px 20px;
+    border-radius: 4px;
+    z-index: 1;
+}
+.label-header i{
+    margin-right: 10px;
+}
+.label-header:hover{
+    color: #007bff;
+}
+/*end header*/
+/*avatar*/
+.label-avatar2{
+    display: flex;
+    margin: 0 auto;
+    border-radius: 50%;
+    width: 7.875rem;
+    height: 7.875rem;
+    position: relative;
+    border: .1875rem solid #fff;
+    cursor: pointer;
+}
+.label-avatar2:hover{
+    border: .1875rem solid #007bff;
+}
+.label-avatar2:hover .small-circle2{
+    background: #007bff;
+}
+.avatar-img2{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+.input-avatar2 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(19,33,68,.25);
+    border-radius: 50%;
+    transition: .2s;
+}
+.small-circle2 {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    background: #ffffff;
+    box-shadow: 0 3px 6px 0 rgba(140,152,164,.25) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.small-circle2:hover{
+    background: #007bff !important;
+}
+/*end avatar*/
 
