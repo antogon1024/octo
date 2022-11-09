@@ -21,11 +21,15 @@ class GeneratorAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/generator.css',
+        'css/custombox.min.css',
+        'css/cropper.css',
         //'css/theme.min.css',
         //'css/font-awesome.min.css',
     ];
     public $js = [
         'js/generator.js',
+        'js/cropper.js',
+        'js/custombox.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

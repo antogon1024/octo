@@ -40,6 +40,14 @@ GeneratorAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
+            ['label' => 'Новая страница', 'url' => ['generator/new-page']],
+            ['label' => 'Мои страницы', 'url' => ['generator/my-pages']],
+        ],
+    ]);
+
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav'],
+        'items' => [
             ['label' => 'Выйти', 'url' => ['generator/logout']],
         ],
     ]);

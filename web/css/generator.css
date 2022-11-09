@@ -101,7 +101,7 @@
 }
 /*end header*/
 /*avatar*/
-.label-avatar2{
+.label-avatar{
     display: flex;
     margin: 0 auto;
     border-radius: 50%;
@@ -111,18 +111,18 @@
     border: .1875rem solid #fff;
     cursor: pointer;
 }
-.label-avatar2:hover{
+.label-avatar:hover{
     border: .1875rem solid #007bff;
 }
-.label-avatar2:hover .small-circle2{
+.label-avatar:hover .small-circle{
     background: #007bff;
 }
-.avatar-img2{
+.avatar-img{
     width: 100%;
     height: 100%;
     border-radius: 50%;
 }
-.input-avatar2 {
+.input-avatar {
     position: absolute;
     top: 0;
     right: 0;
@@ -135,7 +135,7 @@
     border-radius: 50%;
     transition: .2s;
 }
-.small-circle2 {
+.small-circle {
     position: absolute;
     bottom: 0;
     right: 0;
@@ -149,8 +149,10 @@
     align-items: center;
     justify-content: center;
 }
-.small-circle2:hover{
+.small-circle:hover{
     background: #007bff !important;
 }
+#formAvatar{
+    margin-top: -100px;
+}
 /*end avatar*/
-

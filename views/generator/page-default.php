@@ -6,7 +6,8 @@
 }
 
 echo '<pre>';print_r(Yii::$app->user->identity->username);*/
-
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 ?>
 <div class="block-buttons">
     <button type="button" class="btn btn-primary 2btn-sm block-menu-1">Блоки</button>
@@ -104,14 +105,20 @@ echo '<pre>';print_r(Yii::$app->user->identity->username);*/
         <div class="block-header">
         <div class="wrap-header">
             <img class="img-header" src="/web/img/header.jpg" alt="">
-            <form action="" id="form1" method="post" enctype="multipart/form-data">
-                <input id="file1" name="file1" type="file" class="input-header">
-                <input type="hidden" name="ddd" value="1">
-                <input type="hidden" name="_csrf"
-                       value="6zfsTQaJpCtH2RjrIgqXwDnba08o6JdUnkkSBV5lFEWuc6Z_T8ToYDGMd4gbR9SLfL40dnG85QTvfXF8Ll1YIw==">
-            </form>
 
-            <label for="file1" class="label-header">
+            <?php $form = ActiveForm::begin([
+                'id' => 'formHeader',
+                'action' => '',
+                'options' => ['class' => 'form-vertical', 'enctype' => 'multipart/form-data'],
+            ]); ?>
+                <?= Html::hiddenInput('x', '', ['id' => 'header-x']) ?>
+                <?= Html::hiddenInput('y', '', ['id' => 'header-y']) ?>
+                <?= Html::hiddenInput('w', '', ['id' => 'header-w']) ?>
+                <?= Html::hiddenInput('h', '', ['id' => 'header-h']) ?>
+                <?= Html::activeInput('file', $page, 'header', ['id' => 'header', 'class' => 'input-header']) ?>
+            <?php ActiveForm::end(); ?>
+
+            <label for="header" class="label-header">
                 <i class="fa fa-camera"></i><span>Изменить</span>
             </label>
         </div>
@@ -142,4 +149,28 @@ echo '<pre>';print_r(Yii::$app->user->identity->username);*/
         <button type="button" class="btn btn-outline-danger butdel ant-delete-page#">Удалить</button>
     </div>
 </div>
+
+<div id="b3" class="b3 ant-size" style="max-width: 600px;padding: 0 50px;display: none;background: #000000;">
+    <div class="top-ava">Выберите область фотографии<i class="tio-clear nav-icon" onclick="Custombox.modal.close();"></i></div>
+    <div>
+        <!--<img id="ant-crop" class="ant-size" src="" style="22max-width: 600px;">-->
+        <img id="ant-crop" class="ant-size" src="" style="max-width: 100%;">
+    </div>
+
+    <div class="bottom-ava">
+        <button type="button" class="save-ava btn btn-primary">Сохранить</button>
+        <button type="button" class="btn btn-primary" onclick="Custombox.modal.close();">Отмена</button>
+    </div>
+</div>
+<div id="b4" class="b4 ant-size" style="max-width: 1000px;padding: 0 50px;display: none;background: #000000">
+    <div class="top-ava">Выберите область фотографии<i class="tio-clear nav-icon" onclick="Custombox.modal.close();"></i></div>
+    <div>
+        <!--<img id="ant-crop2" class="ant-size" src="" style="max-width: 1000px;">-->
+        <img id="ant-crop2" class="ant-size" src="" style="max-width: 100%;">
+    </div>
+
+    <div class="bottom-ava">
+        <button type="button" class="save-background btn btn-primary">Сохранить</button>
+        <button type="button" class="btn btn-primary" onclick="Custombox.modal.close();">Отмена</button>
+    </div>
 </div>

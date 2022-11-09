@@ -75,7 +75,8 @@ $config = [
                 'forgot' => 'user/recovery/request',
                 'logout' => 'generator/logout',
 
-                'generator' => 'generator/create-page',
+                'generator' => 'generator/new-page',
+                'generator/<id:\d+>' => 'generator/page',
             ],
         ],
 
