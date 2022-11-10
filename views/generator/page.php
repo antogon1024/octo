@@ -12,6 +12,7 @@ use yii\widgets\ActiveForm;
 
 //exit;
 ?>
+<div class="wrap-page">
 <div class="block-buttons">
     <button type="button" class="btn btn-primary 2btn-sm block-menu-1">Блоки</button>
     <button type="button" class="btn btn-outline-primary 2btn-sm block-content-1">Контент</button>
@@ -19,7 +20,7 @@ use yii\widgets\ActiveForm;
 </div>
 
 <div class="row">
-    <div class="col-lg-3 block-menu-2">
+    <div class="col-lg-3 2col-md-4 block-menu-2">
         <button type="button" class="btn btn-secondary btn-sm block-switch">Простые блоки</button>
 
         <ul class="nav flex-column sidebar">
@@ -104,7 +105,7 @@ use yii\widgets\ActiveForm;
         </ul>
     </div>
 
-    <div class="col-lg-6 block-content-2">
+    <div class="col-lg-6 2col-md-8 block-content-2">
         <div class="block-header">
             <div class="wrap-header">
                 <img class="img-header" src="<?= $header ?>" alt="">
@@ -153,11 +154,14 @@ use yii\widgets\ActiveForm;
 
 
     </div>
-    <div class="col-lg-3 block-setting-2">
+    <div class="col-lg-3 2col-md-8 block-setting-2">
         <button type="button" class="btn btn-outline-primary ant-save-page">Сохранить</button>
         <button type="button" class="btn btn-outline-danger butdel ant-delete-page#">Удалить</button>
     </div>
 </div>
+
+</div>
+
 
 <div id="b3" class="b3 ant-size" style="max-width: 600px;padding: 0 50px;display: none;background: #000000;">
     <div class="top-ava">Выберите область фотографии<i class="tio-clear nav-icon"

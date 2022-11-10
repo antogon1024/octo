@@ -58,7 +58,7 @@ GeneratorAsset::register($this);
 </header>
 
 <main role="main">
-    <div class="container" style="padding-top: 80px">
+    <div class="container" style="padding-top: 100px">
         <?php //= Alert::widget() ?>
         <?= $content ?>
     </div>
