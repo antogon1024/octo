@@ -11,6 +11,7 @@
 
 namespace app\controllers;
 
+use app\models\Page;
 use Da\User\Event\FormEvent;
 use Da\User\Form\LoginForm;
 use Yii;
@@ -66,7 +67,7 @@ class SecurityController extends BaseController
 
                 $this->trigger(FormEvent::EVENT_AFTER_LOGIN, $event);
 
-                return $this->redirect(['/generator/create-page']);
+                return $this->redirect(['/generator/my-pages']);
             }
             else
             {

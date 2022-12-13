@@ -76,7 +76,7 @@ class RegistrationController extends BaseController
                 ]);
                 if ($user) {
                     \Yii::$app->user->switchIdentity($user);
-                    return $this->redirect(['/generator/create-page']);
+                    return $this->redirect(['/generator']);
                 }
 
                 /*if ($this->module->enableEmailConfirmation) {

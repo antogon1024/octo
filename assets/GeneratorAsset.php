@@ -23,6 +23,7 @@ class GeneratorAsset extends AssetBundle
         'css/generator.css',
         'css/custombox.min.css',
         'css/cropper.css',
+        'css/swiper.css',
         //'css/theme.min.css',
         //'css/font-awesome.min.css',
     ];
@@ -30,6 +31,7 @@ class GeneratorAsset extends AssetBundle
         'js/generator.js',
         'js/cropper.js',
         'js/custombox.min.js',
+        'js/swiper.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
