@@ -33,3 +33,6 @@ tests/_support/_generated
 /.vagrant
 
 /web/assets
+/web/img/slider/*
+/web/img/avatar/*
+/web/img/header/*
