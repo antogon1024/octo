@@ -156,7 +156,7 @@ jQuery(document).ready(function ($) {
         $('.block').removeClass('active');
         classBlock = 'block-' + nameBlock;
         idBlock = getBlockId(classBlock);
-        bl = '<div id="' + idBlock + '" class="' + classBlock + ' .ui-sortable-handle block active nosave">' + content + '</div>';
+        bl = '<div id="' + idBlock + '" class="' + classBlock + ' ui-sortable-handle block active nosave">' + content + '</div>';
         $('.ant-wrap').append(bl);
 
         $('.setting-block').hide();
@@ -181,6 +181,12 @@ jQuery(document).ready(function ($) {
     if( $('#'+block).hasClass('block-slider') ){
         selectSlider(block);
     }
+
+    // перемещение блоков
+    $( function() {
+        $( "#sortable" ).sortable();
+        $( "#sortable" ).disableSelection();
+    });
     // end common
     // slider ------------------------------
     // добавляет пустой блок слайдера
@@ -334,7 +340,7 @@ jQuery(document).ready(function ($) {
     });
 
     // end slider ------------------------------
-    alert(block);
+    //alert(block);
 });
 
 /*

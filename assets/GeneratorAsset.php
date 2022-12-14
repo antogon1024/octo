@@ -32,6 +32,7 @@ class GeneratorAsset extends AssetBundle
         'js/cropper.js',
         'js/custombox.min.js',
         'js/swiper.js',
+        'js/jqui.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
