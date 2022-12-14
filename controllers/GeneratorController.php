@@ -55,6 +55,18 @@ class GeneratorController extends Controller
 
     public function actionPage($id)
     {
+       /* $ar = [1,2];
+        $n =0;
+        foreach($ar as $v){
+            if($v > n){
+
+            }
+        }
+
+
+        exit;*/
+
+
         $page = Page::find()
             ->where(['id' => $id])
             ->one();

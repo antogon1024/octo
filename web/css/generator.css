@@ -222,7 +222,7 @@
 .swiper-pagination {
     position: static !important;
     text-align: center !important;
-    margin-top: 40px;
+    margin: 20px 0;
 }
 .swiper-pagination-bullet-active {
     width: 12px !important;
