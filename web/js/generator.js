@@ -97,9 +97,7 @@ jQuery(document).ready(function ($) {
                     },
                 });
             }
-            //cropper.destroy();
         }
-        //return myfile;
     }
 
     //aaa header
@@ -121,7 +119,6 @@ jQuery(document).ready(function ($) {
         flagUpload = 'slider';
         $('.save-background').text('Выбрать');
         src = cropImage(evt, 'image', 4 / 5);
-        //addImageSlider(src, block);
     }
 
     $('.save-background').click(function () {
@@ -133,6 +130,60 @@ jQuery(document).ready(function ($) {
             Custombox.modal.close();
             addImageSlider();
         }
+    });
+
+    $('.toggle-switch-label').click(function () {
+        checkSwitch();
+    });
+
+    function checkSwitch(){
+        if( $('#customSwitchDefaultSize').prop('checked') == true ) {
+            $('.d-block').text('Страница не активна');
+        }else{
+            $('.d-block').text('Страница активна');
+        }
+    }
+
+    if( $('#customSwitchDefaultSize').prop('checked') == true ) {
+        $('.d-block').text('Страница активна');
+    }else{
+        $('.d-block').text('Страница не активна');
+    }
+
+    $("#page-background").asColorPicker({
+        mode: 'simple',
+    });
+
+    $("body").on("click", ".asColorPicker-saturation, .asColorPicker-hue, .asColorPicker-alpha", function () {
+        rgb = $('.asColorPicker-trigger span').css('backgroundColor');
+        hex = rgb2hex(rgb);
+
+        $("#page-background").asColorPicker('set', rgb);
+        $("#page-background").val(hex);
+        $('.full-page').css('backgroundColor', rgb);
+    });
+
+    function rgb2hex(rgb){
+        rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+        return (rgb && rgb.length === 4) ? "#" +
+            ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+    }
+
+    let rgb = $('.full-page').css('backgroundColor');
+
+    if(rgb != 'rgba(0, 0, 0, 0)'){
+        $("#page-background").asColorPicker('set', rgb);
+    }
+
+    hex = rgb2hex(rgb);
+
+    $("#page-background").val(hex);
+    $('#page-caption').val( $('.pg-caption').text() );
+
+    $('#url-page').click(function () {
+
     });
 // common ============================================================================
     var block;
@@ -156,7 +207,7 @@ jQuery(document).ready(function ($) {
         $('.block').removeClass('active');
         classBlock = 'block-' + nameBlock;
         idBlock = getBlockId(classBlock);
-        bl = '<div id="' + idBlock + '" class="' + classBlock + ' ui-sortable-handle block active nosave">' + content + '</div>';
+        bl = '<div id="' + idBlock + '" class="' + classBlock + ' block active nosave">' + content + '</div>';
         $('.ant-wrap').append(bl);
 
         $('.setting-block').hide();
@@ -170,11 +221,16 @@ jQuery(document).ready(function ($) {
     });
 
     $('.ant-save-page').click(function () {
-        nameBlock = block.replace(/\-\d+/, '');
+        if( $('#'+block).hasClass('nosave') ) {
+            $('.nosave').removeClass('nosave');
+            nameBlock = block.replace(/\-\d+/, '');
 
-        if (nameBlock == 'slider') {
-            saveCrop();
+            if (nameBlock == 'slider') {
+                saveCrop();
+            }
         }
+
+        savePage();
     });
 
     block = $('.block.active').attr('id');
@@ -187,6 +243,45 @@ jQuery(document).ready(function ($) {
         $( "#sortable" ).sortable();
         $( "#sortable" ).disableSelection();
     });
+
+    $('.switch-setting').click(function () {
+        //alert(2)
+        if($(this).attr('name') == 'page'){
+            $(this).attr('name', 'block');
+            $(this).text('Настройки блока');
+            $('.set-block').show();
+            $('.set-page').hide();
+        }else{
+            $(this).attr('name', 'page');
+            $(this).text('Настройки страницы');
+            $('.set-block').hide();
+            $('.set-page').show();
+        }
+    });
+
+    let opt = cookie.get('save');
+    opt = (opt == 'page') ? 'block' : 'page';
+    $('.switch-setting').click();
+
+    function savePage(){
+        opt = $('.switch-setting').attr('name');
+        cookie.set('save', opt);
+
+        ht = $('.ant-wrap').html();
+        $('input[name="page"]').val(ht);
+
+        cpt = $('#page-caption').val();
+        $('input[name="caption"]').val(cpt);
+
+        bg = $('.full-page').css('backgroundColor');
+        $('input[name="bgcolor"]').val(bg);
+
+        showPage = ( $('.toggle-switch-input').prop('checked') == true) ? 1 : 0;
+        alert(showPage)
+        $('input[name="show-page"]').val(showPage);
+
+        $('#formPage').submit();
+    }
     // end common
     // slider ------------------------------
     // добавляет пустой блок слайдера
@@ -199,21 +294,14 @@ jQuery(document).ready(function ($) {
         addBlock('slider', content);
         $('.wrap-input').empty();
         $('#setting-slider').show();
+        $('.set-page').hide();
+        $('.set-block').show();
     });
 
     // выбор определенного слайдера и его настройки
     $(".ant-wrap").on("click", ".block-slider", function () {
         block = $(this).attr('id');
         selectSlider(block);
-
-        /*$('#setting-slider').show();
-        $('.wrap-input').empty();
-
-        $(this).find('.swiper-slide').each(function (i) {
-            var el = $('.template .el-input').clone().appendTo('.wrap-input');
-            nm = $(this).attr('src').split('/');
-            el.find('input').val(nm[nm.length - 1]);
-        });*/
     });
     function selectSlider(block){
         $('#setting-slider').show();
@@ -268,15 +356,13 @@ jQuery(document).ready(function ($) {
                 contentType: false,
                 success(data) {
                     data = JSON.parse(data);
+                    console.log(data)
                     $('.temp').attr('src', data.dir + '/' + data.name);
                     $('.temp').attr('name', data.name);
                     $('.temp').removeClass('temp');
-
                     $('.nosave').removeClass('nosave');
-                    ht = $('.ant-wrap').html();
 
-                    $('input[name="page"]').val(ht);
-                    $('#formPage').submit();
+                    savePage();
                 },
             });
         })
@@ -285,6 +371,7 @@ jQuery(document).ready(function ($) {
     // добавление фото в определенный блок
     function addImageSlider() {
         bl = $('#' + block);
+        bl.addClass('nosave');
 
         if (bl.find('.temp') != undefined) {
             bl.find('.temp').remove();
@@ -316,7 +403,6 @@ jQuery(document).ready(function ($) {
 
         initSlider(2, block, centr);
         Custombox.modal.close();
-        //cropper.destroy();
     }
 
     // удаляет фото из блока слайдера

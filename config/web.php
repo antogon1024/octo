@@ -77,6 +77,8 @@ $config = [
 
                 'generator' => 'generator/new-page',
                 'generator/<id:\d+>' => 'generator/page',
+
+                'page/<id:\d+>' => 'generator/pages',
             ],
         ],
 

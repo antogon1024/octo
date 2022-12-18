@@ -24,6 +24,7 @@ class GeneratorAsset extends AssetBundle
         'css/custombox.min.css',
         'css/cropper.css',
         'css/swiper.css',
+        'css/asColorPicker.css',
         //'css/theme.min.css',
         //'css/font-awesome.min.css',
     ];
@@ -33,6 +34,12 @@ class GeneratorAsset extends AssetBundle
         'js/custombox.min.js',
         'js/swiper.js',
         'js/jqui.js',
+        //'js/jq.js',
+        'js/jquery-asColor.js',
+        'js/jquery-asGradient.min.js',
+        'js/jquery-asColorPicker.js',
+        'js/test.js',
+
     ];
     public $depends = [
         'yii\web\YiiAsset',

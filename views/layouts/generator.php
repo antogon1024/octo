@@ -11,8 +11,6 @@ use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 
 GeneratorAsset::register($this);
-//use app\assets\LoginAsset;
-//LoginAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -63,7 +61,6 @@ GeneratorAsset::register($this);
         <?= $content ?>
     </div>
 </main>
-
 <?php $this->endBody() ?>
 </body>
 </html>

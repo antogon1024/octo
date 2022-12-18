@@ -55,28 +55,11 @@ class GeneratorController extends Controller
 
     public function actionPage($id)
     {
-       /* $ar = [1,2];
-        $n =0;
-        foreach($ar as $v){
-            if($v > n){
-
-            }
-        }
-
-
-        exit;*/
-
-
         $page = Page::find()
             ->where(['id' => $id])
             ->one();
 
         $slider = new Slider();
-        /*$slider->user_id = Yii::$app->user->identity->id;
-        $slider->page_id = 4;
-        $slider->image = 'ddd';
-        $slider->save(false);*/
-
         $srcHeader = '/web/img/header/' . '/' . $page->user_id . '/' . $page->header;
         $srcAvatar = '/web/img/avatar/' . '/' . $page->user_id . '/' . $page->avatar;
 
@@ -100,17 +83,26 @@ class GeneratorController extends Controller
 
             if(isset(Yii::$app->request->post()['page'])){
                 $page->page = trim( Yii::$app->request->post()['page'] );
+                $page->bgcolor = trim( Yii::$app->request->post()['bgcolor'] );
+                $page->show_page = trim( Yii::$app->request->post()['show-page'] );
+                $page->caption = trim( Yii::$app->request->post()['caption'] );
                 $page->save(false);
             }
 
             return $this->redirect(Yii::$app->request->url);
         }
 
+        $url = str_replace('generator', 'page', Yii::$app->request->url);
+        $host = Yii::$app->request->hostName;
+
         return $this->render('page', [
             'page' => $page,
+            'checked' => ($page->show_page == 1) ? ' checked' : '',
             'slider' => $slider,
             'header' => $header,
             'avatar' => $avatar,
+            'url' => $host . $url,
+            'url2' => $url,
         ]);
     }
 
@@ -151,10 +143,17 @@ class GeneratorController extends Controller
             ->where(['user_id' => $userId])
             ->asArray()
             ->all();
-        //echo '<pre>';print_r($pages);exit;
 
         return $this->render('mypages', [
             'pages' => $pages,
+        ]);
+    }
+
+    public function actionPages($id)
+    {
+
+        return $this->render('pages', [
+            'id' => $id,
         ]);
     }
 
@@ -168,42 +167,8 @@ class GeneratorController extends Controller
         $this->layout = 'empty';
         //$this->enableCsrfValidation = false;
 
-        $form = new UploadForm();
-
-        if (Yii::$app->request->isPost) {
-            $form->files = UploadedFile::getInstances($form, 'files');
-echo '<pre>';print_r($_FILES);exit;
-            if ($form->files && $form->validate()) {
-                echo '<pre>';print_r($form->files);exit;
-                foreach ($form->files as $file) {
-                    //$image = new ProductImage();
-                    if ($image->save()) {
-                        $file->saveAs($image->getPath());
-                    }
-                }
-
-            }
-        }
-
         return $this->render('test', [
-            'uploadForm' => $form,
+
         ]);
-
-
-
-        /*$model = new UploadForm();
-
-        if (Yii::$app->request->isPost) {
-            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
-            if ($model->upload()) {
-echo '<pre>';print_r($_FILES);exit;
-                // file is uploaded successfully
-                //return;
-            }
-        }
-
-        return $this->render('test', ['model' => $model]);
-        */
-
     }
 }

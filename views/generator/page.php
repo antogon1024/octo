@@ -1,8 +1,6 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
 ?>
 <div class="wrap-page">
     <div class="block-buttons">
@@ -98,7 +96,8 @@ use yii\widgets\ActiveForm;
         </div>
 
         <div class="col-lg-6 2col-md-8 block-content-2">
-            <div class="block-header">
+            <div class="full-page" style="background: <?=$page->bgcolor?>">
+                <div class="block-header">
                 <div class="wrap-header">
                     <img class="img-header" src="<?= $header ?>" alt="">
 
@@ -143,41 +142,85 @@ use yii\widgets\ActiveForm;
 
                 <?php ActiveForm::end(); ?>
             </div>
-            <div id="sortable" class="ant-wrap"><?=$page->page?></div>
+                <?php if($page->caption):?>
+                <h3 class="pg-caption"><?=$page->caption?></h3>
+                <?php endif; ?>
+
+                <div id="sortable" class="ant-wrap">
+                    <?= $page->page ?>
+                </div>
+            </div>
         </div>
         <div class="col-lg-3 2col-md-8 block-setting-2">
-            <div id="setting-button" class="setting-block"></div>
-            <div id="setting-text" class="setting-block"></div>
-            <div id="setting-video" class="setting-block"></div>
-            <div id="setting-map" class="setting-block"></div>
-            <div id="setting-split" class="setting-block"></div>
-            <div id="setting-faq" class="setting-block"></div>
-            <div id="setting-button" class="setting-block"></div>
+            <div>
+                <button type="button" class="btn btn-outline-primary switch-setting" name="page">Настройка страницы
+                </button>
+            </div>
+            <div class="set-page">
+                <form action="" method="post">
+                    <div class="form-group url">
+                        <label for="url-page">URL ссылки</label>
+                        <input type="text" class="form-control" id="url-page" value="<?=$url?>" readonly>
+                        <a href="<?=$url2?>" target="_blank">
+                        <i class="fa fa-external-link"></i>
+                        </a>
+                    </div>
 
-            <div id="setting-slider" class="setting-block">
-                <label type="button" class="btn btn-outline-primary 22ant-save-page custom-file-upload">
-                    <?= Html::activeInput('file', $slider, 'image', ['id' => 'slider', 'class' => 'input-slider']) ?>
-                    Выбрать изображение
-                </label>
+                    <div class="form-group page-caption">
+                        <label for="url-page">Заголовок страницы</label>
+                        <input type="text" class="form-control" id="page-caption" placeholder="">
+                    </div>
 
-                <div class="wrap-input"></div>
+                    <div class="form-group page-background">
+                        <label for="url-page">Цвет фона</label>
+                        <input type="text" class="form-control" id="page-background" placeholder="">
+                    </div>
+
+                    <label class="toggle-switch d-flex align-items-center mb-3" for="customSwitchDefaultSize">
+                        <input type="checkbox" class="toggle-switch-input" id="customSwitchDefaultSize"<?=$checked?>>
+                        <span class="toggle-switch-label">
+                            <span class="toggle-switch-indicator"></span>
+                        </span>
+                        <span class="toggle-switch-content">
+                            <span class="d-block">Страница активна</span>
+                        </span>
+                    </label>
+                </form>
+            </div>
+
+            <div class="set-block">
+                <div id="setting-button" class="setting-block"></div>
+                <div id="setting-text" class="setting-block"></div>
+                <div id="setting-video" class="setting-block"></div>
+                <div id="setting-map" class="setting-block"></div>
+                <div id="setting-split" class="setting-block"></div>
+                <div id="setting-faq" class="setting-block"></div>
+                <div id="setting-button" class="setting-block"></div>
+
+                <div id="setting-slider" class="setting-block">
+                    <label type="button" class="btn btn-outline-primary 22ant-save-page custom-file-upload">
+                        <?= Html::activeInput('file', $slider, 'image', ['id' => 'slider', 'class' => 'input-slider']) ?>
+                        Выбрать изображение
+                    </label>
+
+                    <div class="wrap-input"></div>
+                </div>
             </div>
 
             <div class="bl-save">
-            <button type="button" class="btn btn-outline-primary ant-save-page">Сохранить</button>
-            <button type="button" class="btn btn-outline-danger butdel ant-delete-page#">Удалить</button>
+                <button type="button" class="btn btn-outline-primary ant-save-page">Сохранить</button>
+                <button type="button" class="btn btn-outline-danger butdel ant-delete-page#">Удалить</button>
             </div>
         </div>
     </div>
 
 </div>
 
-<div>
+<div style="display: none">
     <div id="b4" class="b4 ant-size" style="max-width: 1000px;padding: 0 50px;display: none;background: #000000">
         <div class="top-ava">Выберите область фотографии<i class="tio-clear nav-icon"
                                                            onclick="Custombox.modal.close();"></i></div>
         <div>
-            <!--<img id="ant-crop2" class="ant-size" src="" style="max-width: 1000px;">-->
             <img id="ant-crop2" class="ant-size" src="" style="max-width: 100%;">
         </div>
 
@@ -189,6 +232,9 @@ use yii\widgets\ActiveForm;
 
     <form id="formPage" action="" enctype="multipart/form-data" method="post">
         <input type="hidden" name="page">
+        <input type="hidden" name="bgcolor">
+        <input type="hidden" name="show-page">
+        <input type="hidden" name="caption">
     </form>
 
     <form id="removeImg" action="/generator/remove-img" method="post">
@@ -197,22 +243,14 @@ use yii\widgets\ActiveForm;
         <input type="hidden" name="page">
     </form>
 
-    <!--<div class="templ-slider">
-        <div class="templ-page">
-            <div class="block-slider ui-sortable-handle block active swiper-container">
-                <img class="ant-imgstart" src="/web/img/add_image.png" width="100%">
-            </div>
-        </div>
-        <div class="templ-setting">
-            <div class="setting-block"></div>
-        </div>
-    </div>-->
     <div class="template">
         <div class="el-input" style="position: relative;">
-            <input class="form-control 2text-button ant-img-name" type="text" name="image" value="" readonly style="margin-top: 30px;">
+            <input class="form-control 2text-button ant-img-name" type="text" name="image" value="" readonly
+                   style="margin-top: 30px;">
             <i class="img-close fa fa-remove"></i>
         </div>
     </div>
 
 </div>
+
 

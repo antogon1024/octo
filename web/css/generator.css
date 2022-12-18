@@ -1,3 +1,99 @@
+.full-page{
+    padding: 10px;
+}
+.pg-caption{
+    text-align: center;
+    margin: 0 0 30px 0;
+}
+.block-header{
+    margin-bottom: 30px;
+}
+.set-page{
+    display: block;
+}
+.set-block{
+    display: none;
+}
+.switch-setting{
+    margin-bottom: 30px;
+}
+.toggle-switch{
+    margin-top: 20px;
+}
+.page-background{
+    position: relative;
+}
+.btn-background{
+    position: absolute;
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    border: 2px solid #ccc;
+    right: 0;
+    top: 32px;
+}
+/* checkbox*/
+.toggle-switch-input:checked + .toggle-switch-label {
+    background-color: #377dff;
+}
+.toggle-switch {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    cursor: pointer;
+}
+.toggle-switch-input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+.toggle-switch-label {
+    position: relative;
+    display: block;
+    width: 3rem;
+    height: 2rem;
+    background-color: #e7eaf3;
+    background-clip: content-box;
+    border: .125rem solid transparent;
+    border-radius: 6.1875rem;
+    transition: .3s;
+}
+.toggle-switch-content {
+    -ms-flex: 1;
+    flex: 1;
+    margin-left: .5rem;
+}
+.toggle-switch-input:checked + .toggle-switch-label .toggle-switch-indicator {
+    -webkit-transform: translate3d(1.025rem,50%,0);
+    transform: translate3d(1.025rem,50%,0);
+}
+.toggle-switch-indicator {
+    position: absolute;
+    left: .125rem;
+    bottom: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: #fff;
+    -webkit-transform: initial;
+    transform: initial;
+    box-shadow: 0 3px 6px 0 rgba(140,152,164,.25);
+    border-radius: 50%;
+    -webkit-transform: translate3d(0,50%,0);
+    transform: translate3d(0,50%,0);
+    transition: .3s;
+}
+/* end checkbox*/
+.url{
+    position: relative;
+}
+.url i{
+    position: absolute;
+    right: 20px;
+    top: 42px;
+    cursor: pointer;
+}
 .bl-save{
     margin-top: 30px;
 }
