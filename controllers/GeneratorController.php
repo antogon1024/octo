@@ -10,6 +10,9 @@ use app\models\UploadForm;
 /*test*/
 use Yii;
 
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\helpers\FileHelper;
 use yii\web\Controller;
 use app\models\Page;
 use yii\web\UploadedFile;
@@ -22,23 +25,14 @@ class GeneratorController extends Controller
 {
     public $enableCsrfValidation = false;
 
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
-        ];
-    }
-
     public function init()
     {
         parent::init();
         $this->layout = 'generator';
+
+        if(Yii::$app->user->isGuest){
+            //return $this->redirect(['/logout']);
+        }
     }
 
     public function actionIndex()
@@ -55,15 +49,19 @@ class GeneratorController extends Controller
 
     public function actionPage($id)
     {
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(['/logout']);
+        }
+
         $page = Page::find()
             ->where(['id' => $id])
             ->one();
 
         $slider = new Slider();
-        $srcHeader = '/web/img/header/' . '/' . $page->user_id . '/' . $page->header;
-        $srcAvatar = '/web/img/avatar/' . '/' . $page->user_id . '/' . $page->avatar;
+        $srcHeader = '/web/img/header/' . $page->user_id . '/' . $page->header;
+        $srcAvatar = '/web/img/avatar/' . $page->user_id . '/' . $page->avatar;
 
-        $avatar = ($page->avatar) ? $srcAvatar : '/web/img/avatar.jpg';
+        $avatar = ($page->avatar) ? $srcAvatar : '/web/img/user.jpg';
         $header = ($page->header) ? $srcHeader : '/web/img/header.jpg';
 
         if(Yii::$app->request->isPost){
@@ -82,10 +80,13 @@ class GeneratorController extends Controller
             }
 
             if(isset(Yii::$app->request->post()['page'])){
+                //echo '<pre>';print_r(Yii::$app->request->post());exit;
                 $page->page = trim( Yii::$app->request->post()['page'] );
                 $page->bgcolor = trim( Yii::$app->request->post()['bgcolor'] );
                 $page->show_page = trim( Yii::$app->request->post()['show-page'] );
                 $page->caption = trim( Yii::$app->request->post()['caption'] );
+                $page->setting = trim( Yii::$app->request->post()['setting'] );
+                $page->block = trim( Yii::$app->request->post()['block'] );
                 $page->save(false);
             }
 
@@ -94,6 +95,21 @@ class GeneratorController extends Controller
 
         $url = str_replace('generator', 'page', Yii::$app->request->url);
         $host = Yii::$app->request->hostName;
+        //echo '<pre>';print_r($page);exit;
+        $ar = ['button', 'text', 'video', 'map', 'slider'];
+        $arBlock['setBlock'] = 'display:none';
+        $arBlock['setPage'] = 'display:block';
+
+        foreach($ar as $v){
+            if($page->block == $v) {
+                $arBlock[$v] = 'display:block';
+                $arBlock['setBlock'] = 'display:block';
+                $arBlock['setPage'] = 'display:none';
+            }else{
+                $arBlock[$v] = 'display:none';
+            }
+        }
+        //echo '<pre>';print_r($arBlock);exit;
 
         return $this->render('page', [
             'page' => $page,
@@ -103,6 +119,7 @@ class GeneratorController extends Controller
             'avatar' => $avatar,
             'url' => $host . $url,
             'url2' => $url,
+            'arBlock' => $arBlock,
         ]);
     }
 
@@ -124,6 +141,29 @@ class GeneratorController extends Controller
         }
     }
 
+    public function actionRemovePage()
+    {
+        if(Yii::$app->request->isPost){
+            $post = Yii::$app->request->post();
+            $page = Page::findOne($post['page_id']);
+
+            if($post['action'] == 'block'){
+                $page->page = trim( $post['page'] );
+                $page->setting = trim( $post['setting'] );
+                $page->save(false);
+                return $this->redirect('/generator/' . $post['page_id']);
+            }else{
+                $page->delete();
+                $path = Yii::getAlias('@app') . "/web/img/slider/" . $post['page_id'];
+                if(file_exists($path)){
+                    FileHelper::removeDirectory($path);
+                }
+                return $this->redirect('/generator/my-pages');
+            }
+            //return $this->redirect('/generator/' . $post['page_id']);
+        }
+    }
+
     public function actionNewPage()
     {
         $userId = Yii::$app->user->identity->id;
@@ -137,6 +177,10 @@ class GeneratorController extends Controller
 
     public function actionMyPages()
     {
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(['/logout']);
+        }
+
         $userId = Yii::$app->user->identity->id;
 
         $pages = Page::find()
@@ -151,9 +195,14 @@ class GeneratorController extends Controller
 
     public function actionPages($id)
     {
-
+        $this->layout = 'pages';
+        $page = Page::find()
+            ->where(['id' => $id])
+            ->one();
+//echo '<pre>';print_r($page);exit;
         return $this->render('pages', [
             'id' => $id,
+            'page' => $page,
         ]);
     }
 

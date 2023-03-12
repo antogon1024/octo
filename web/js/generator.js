@@ -1,507 +1,518 @@
 jQuery(document).ready(function ($) {
-    var ratio = 4 / 5;
+    let a = $('.ttt');
+//---------------------------------------------
+    let ratio = 4 / 5;
+    let block = $('.ant-wrap').find('.active').attr('id');
+    let options = {};
+    let move = 0;
 
-    $('.sidebar .nav-item').click(function () {
-        $(this).css('background', '#007bff');
-    });
+    $pageCaption = $('#page-caption');
+    $pageBackground = $('#page-background');
+    $customSwitchDefaultSize = $('#customSwitchDefaultSize'); //page is active
+    $fullPage = $('.full-page'); // background
 
-    $('.sidebar .nav-item').mouseover(function () {
-        $('.label').css('color', '#132144');
-        $(this).find('.label').css('color', '#007bff');
-    });
+    let $urlButton = $('#urlButton');
+    let $labelButton = $('#labelButton');
+    let $radio2 = $('#radio2');
+    let $radio3 = $('#radio3');
+    let $buttonBgColor = $('#buttonBgColor');
+    let $buttonFontColor = $('#buttonFontColor');
+    let wrap = $('.ant-wrap');
+    let isblock = $('#isBlock');
 
-    var blContent = $('.block-content-2');
-    var blMenu = $('.block-menu-2');
-    var blSetting = $('.block-setting-2');
+    setColor = {
+        palette: [
+            '#000000', '#ff0000', '#00ff00', '#ec1c23', '#ff7e26', '#fef100', '#22b14b', '#00a1e7', '#3f47cc', '#a349a4',
+            '#ffffff', '#0000ff', '#b87957', '#feaec9', '#ffc80d', '#eee3af', '#b5e61d', '#99d9ea', '#7092be', '#c8bfe7',
+        ],
+        uppercase: false,
+        required: true,
+    }
 
-    $('.block-menu-1').click(function () {
-        blContent.hide();
-        blSetting.hide();
-        blMenu.show();
-    });
-    $('.block-content-1').click(function () {
-        blMenu.hide();
-        blSetting.hide();
-        blContent.show();
-    });
-    $('.block-setting-1').click(function () {
-        blMenu.hide();
-        blContent.hide();
-        blSetting.show();
+    new JSColor('#buttonBgColor', setColor);
+    new JSColor('#buttonFontColor', setColor);
 
-    });
+    let select = {
+        click: function () {
+            if(move == 1) return;
 
-    $(window).resize(function () {
-        if ($(window).width() < 992) {
-            $('.block-buttons').show();
-        } else {
-            $('.block-buttons').hide();
-            blMenu.show();
-            blContent.show();
-            blSetting.show();
-        }
-    });
+            $('.ant-wrap .nosave').remove();
+            $('.ant-wrap .active').removeClass('active');
+            $(this).addClass('active');
+            block = $(this).attr('id');
+            let nameBlock = block.replace(/\-\d+/, '');
+            $pageBackground.asColorPicker('set', $fullPage.css('backgroundColor'));
+            $pageCaption.val( $('.pg-caption').text() );
+            select[nameBlock]();
+        },
+        button: function () {
+            let obj = $('#'+block).data();
 
-    $(window).resize();
-
-    $('.block-switch').click(function () {
-        if ($('.adv2').is(':visible')) {
-            $('.adv').hide();
-            $('.simple').show();
-            $('.block-switch').text('Простые блоки');
-        } else {
-            $('.adv').show();
-            $('.simple').hide();
-            $('.block-switch').text('Рекламные блоки');
-        }
-    });
-
-    var myfile;
-    var cropper;
-
-    function cropImage(evt, id, ratio) {
-        //aaa event.srcElement for IE
-        var event = evt || window.evt;
-        var tgt = event.target || event.srcElement;
-        files = tgt.files;
-
-        var fr = new FileReader();
-        fr.readAsDataURL(files[0]);
-        fr.onload = function () {
-            myfile = fr.result;
-
-            $('#ant-crop2').attr('src', myfile);
-            var modal = new Custombox.modal({
-                content: {
-                    effect: 'fadein',
-                    target: '#b4',
-                    close: false
+            options[block] = {};
+            for (let key in obj) {
+                if(key == 'url'){
+                    $('#urlButton').val( $('#'+block).data('url') );
+                }else if(key == 'label'){
+                    $('#labelButton').val( $('#'+block).attr('data-label') );
+                }else if (key == 'size'){
+                    $('#' + $('#'+block).data('size')).click();
+                }else if(key == 'bg'){
+                    let bg = $('#'+block).data('bg');
+                    $buttonBgColor[0].jscolor.fromString(bg);
+                }else if(key == 'color'){
+                    let color = $('#'+block).data('color');
+                    $buttonFontColor[0].jscolor.fromString(color);
                 }
+            }
+        }
+    }
+
+    $('.block').on( 'click', select.click );
+    $('#'+block).click();
+
+    let ferrors = {
+        message: '',
+        error: false,
+        runEffect: function(mes, cls){
+            cls = 'toggler alert alert-' + cls;
+            let el = $('#effect');
+            el.removeClass();
+            el.addClass(cls);
+            el.html(mes);
+            el.show('slide', {direction: 'up'}, 500, this.closeEffect);
+        },
+        closeEffect: function(){
+            setTimeout(function () {
+                $("#effect").hide('slide', {direction: 'up'}, 500);
+            }, 2000);
+        },
+        messageOutput: function(){
+            if(this.message != ''){
+                this.runEffect(this.message, 'danger');
+                this.message = '';
+                return false;
+            }else{
+                return true;
+            }
+        },
+        compare: function(v = null, etype = null){
+
+            let i = 0;
+
+            for(let k in options){
+                if(k == 'move1' || k == 'move2') continue;
+                for(let k1 in options[k]){
+                    if( options[k][k1] != $('#'+k).attr('data-'+k1) ){
+                        i++;
+                    }else{
+                        delete options[k][k1];
+                    }
+                }
+            }
+            if(options['move1'] != options['move2']){
+                i++;
+            }
+
+
+            (i == 0) ? $('.indicator').hide() : $('.indicator').show();
+        },
+        changeClass: function(el, error){
+            let elem = el.parent().find('.validate');
+            if(error == false){
+                elem.removeClass('is-valid');
+                elem.addClass('is-invalid');
+            }else{
+                elem.removeClass('is-invalid');
+                elem.addClass('is-valid');
+            }
+        },
+        getOrder: function () {
+            let str = '';
+
+            $('.ant-wrap').find('.block').each(function () {
+                let id = $(this).attr('id');
+                str += id;
             });
-            modal.open();
 
-            var img = new Image();
-            img.src = myfile;
+            return str;
+        },
+        setOptions: function (v, etype) {
+            if(options[block] == undefined){
+                options[block] = {};
+            }
 
-            img.onload = function () {
-                var image = document.getElementById('ant-crop2');
-                cropper = new Cropper(image, {
-                    aspectRatio: ratio,
-                    //cropBoxResizable: false,
-                    cropBoxResizable: true,
-                    crop(event) {
-                        $('#' + id + '-x').val(event.detail.x);
-                        $('#' + id + '-y').val(event.detail.y);
-                        $('#' + id + '-w').val(event.detail.width);
-                        $('#' + id + '-h').val(event.detail.height);
-                    },
+            if(options[block][etype] == undefined) {
+                let v2 = $('#' + block).attr('data-' + etype);
+                options[block][etype] = v2;
+            }
+        },
+        urlButton: function (v, etype) {
+            let url = $urlButton.val();
+            this.message = '';
+            let valid = /^((ftp|http|https):\/\/)?([A-z]+)\.([A-z]{2,})/.test(url);
+            if(valid == false){
+                this.message = '<p>Не правильный url</p>';
+                this.changeClass($urlButton, false);
+            }else{
+                this.changeClass($urlButton, true);
+                $('#'+block).attr('data-url', v);
+            }
+
+            return this.messageOutput();
+        },
+        labelButton: function (v, etype) {
+            let label = $labelButton.val();
+            this.message = '';
+            if(label == ''){
+                this.message = '<p>Поле "Текст в кнопке" не должно быть пустым</p> ';
+                this.changeClass($labelButton, false);
+            }else{
+                this.changeClass($labelButton, true);
+                $('#'+block+' button').text(v);
+                $('#'+block).attr('data-label', v);
+            }
+
+            return this.messageOutput();
+        },
+        radio2: function(v, etype) {
+            ferrors.radio3(v, etype);
+        },
+        radio3: function(v, etype) {
+            (v == 'radio2') ? $('#'+block+' button').removeClass('btn-lg') : $('#'+block+' button').addClass('btn-lg');
+            $('#'+block).attr('data-size', v);
+            return true;
+        },
+        color: function(v, etype, el) {
+            let regexp = /^#[a-f0-9]{8}$/gi;
+
+            if (!regexp.test(v)){
+                this.message = '<p>Цвет должен быть в формате "#ffffffff" , два последних символа - прозрачность</p> ';
+                this.changeClass(el, false);
+                this.messageOutput();
+                return true;
+
+            }else{
+                this.changeClass(el, true);
+                return false;
+            }
+        },
+        buttonBgColor: function(v, etype, el) {
+            if(this.color(v, etype, el)){
+                return true;
+            }
+
+            $('#'+block).attr('data-bg', v);
+            $('#' + block + ' button').css('backgroundColor', v);
+            return false;
+        },
+        buttonFontColor: function(v, etype, el) {
+            if(this.color(v, etype, el)){
+                return true;
+            }
+
+            $('#'+block).attr('data-color', v);
+            $('#' + block + ' button').css('color', v);
+            return false;
+        },
+        button: function() {
+            let label = $labelButton.val();
+            let url = $urlButton.val();
+            let valid = /^((ftp|http|https):\/\/)?([A-z]+)\.([A-z]{2,})/.test(url);
+            if(valid == false){
+                this.message = '<p>Не правильный url</p>';
+                this.changeClass($urlButton, false);
+            }else{
+                this.changeClass($urlButton, true);
+            }
+            if(label == ''){
+                this.message += '<p>Поле "Текст в кнопке" не должно быть пустым</p> ';
+                this.changeClass($labelButton, false);
+            }else{
+                this.changeClass($labelButton, true);
+            }
+
+            return this.messageOutput();
+        },
+        /*text: function() {
+            return true;
+        },
+        video: function() {
+            let url = $urlVideo.val();
+
+            let res = url.match(/(https:\/\/www.youtube.com\/watch\?v=|https:\/\/youtu.be\/)([A-Za-z0-9-]{11})/);
+            if(res == null){
+                this.message = 'Неправильный URL Видео';
+                this.changeClass($urlVideo, false);
+            }else{
+                this.message = '';
+                this.urlVideo = res[2];
+                this.changeClass($urlVideo, true);
+            }
+
+            return this.messageOutput();
+        },
+        map: function() {
+            return true;
+        },
+        slider: function() {
+            return true;
+        },*/
+    };
+
+    var change = {
+        input: function () {
+            if(block == undefined) return;
+
+            let id = $(this).attr('id');
+            if (id == 'switch-move') {
+                change.move();
+                return;
+            }
+
+            let el = $(this);
+            let v = $(this).val();
+            let etype = $(this).attr('data-etype');
+
+            ferrors.setOptions(v, etype); // если значение не изменилось
+
+            if(ferrors[id](v, etype, el) == false) { // если нет ошибок
+                ferrors.compare(v, etype);
+            }
+        },
+        move: function () {
+            move = 1;
+            if ($('#switch-move').prop('checked') == true) {
+                $('.d-block2').text('включено');
+
+                $('.ant-wrap').find('.block').each(function () {
+                    ht = $('.blocks .move-block').clone();
+                    $(this).append(ht);
                 });
+
+                $("#sortable").sortable({
+                    grid: [ 2000, 1 ],
+                    cursor: "move",
+                    opacity: 0.5,
+                    stop: function (event, ui) {
+                        let str = ferrors.getOrder();
+                        options['move2'] = str;
+                        ferrors.compare()
+                    }
+                });
+                $("#sortable").disableSelection();
+
+            } else {
+                move = 0;
+                $('.d-block2').text('выключено');
+                $('.ant-wrap .move-block').remove();
+                $("#sortable").sortable("destroy");
+                $('.block-video').css({'height':0, 'padding-bottom':'56.25%'});
             }
+            return false;
         }
     }
 
-    //aaa header
-    var flagUpload = '';
-    document.getElementById('header').onchange = function (evt) {
-        flagUpload = 'header';
-        $('.save-background').text('Сохранить');
-        cropImage(evt, 'header', 503 / 160);
-    }
+    $('.block-setting-2').on( 'input', 'input', change.input );
 
-    //aaa avatar
-    document.getElementById('avatar').onchange = function (evt) {
-        flagUpload = 'avatar';
-        $('.save-background').text('Сохранить');
-        cropImage(evt, 'ava', 1);
-    }
+    var pageOrBlock = {
+        init: function () {
 
-    document.getElementById('slider').onchange = function (evt) {
-        flagUpload = 'slider';
-        $('.save-background').text('Выбрать');
-        src = cropImage(evt, 'image', 4 / 5);
-    }
-
-    $('.save-background').click(function () {
-        if (flagUpload == 'header') {
-            $('#formHeader').submit();
-        } else if (flagUpload == 'avatar') {
-            $('#formAvatar').submit();
-        } else {
-            Custombox.modal.close();
-            addImageSlider();
-        }
-    });
-
-    $('.toggle-switch-label').click(function () {
-        checkSwitch();
-    });
-
-    function checkSwitch(){
-        if( $('#customSwitchDefaultSize').prop('checked') == true ) {
-            $('.d-block').text('Страница не активна');
-        }else{
-            $('.d-block').text('Страница активна');
-        }
-    }
-
-    if( $('#customSwitchDefaultSize').prop('checked') == true ) {
-        $('.d-block').text('Страница активна');
-    }else{
-        $('.d-block').text('Страница не активна');
-    }
-
-    $("#page-background").asColorPicker({
-        mode: 'simple',
-    });
-
-    $("body").on("click", ".asColorPicker-saturation, .asColorPicker-hue, .asColorPicker-alpha", function () {
-        rgb = $('.asColorPicker-trigger span').css('backgroundColor');
-        hex = rgb2hex(rgb);
-
-        $("#page-background").asColorPicker('set', rgb);
-        $("#page-background").val(hex);
-        $('.full-page').css('backgroundColor', rgb);
-    });
-
-    function rgb2hex(rgb){
-        rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
-        return (rgb && rgb.length === 4) ? "#" +
-            ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
-            ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
-            ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
-    }
-
-    let rgb = $('.full-page').css('backgroundColor');
-
-    if(rgb != 'rgba(0, 0, 0, 0)'){
-        $("#page-background").asColorPicker('set', rgb);
-    }
-
-    hex = rgb2hex(rgb);
-
-    $("#page-background").val(hex);
-    $('#page-caption').val( $('.pg-caption').text() );
-
-    $('#url-page').click(function () {
-
-    });
-// common ============================================================================
-    var block;
-
-    function getBlockId(classBlock) {
-        var n = -1;
-
-        $('.ant-wrap').find('.' + classBlock).each(function () {
-            var n1 = $(this).attr('id').match(/\d+/)*1;
-            if(n1 > n){
-                n = n1;
-            }
-        });
-        n++;
-
-        block = classBlock.replace('block-', '') + '-' + n;
-        return block;
-    }
-
-    function addBlock(nameBlock, content) {
-        $('.block').removeClass('active');
-        classBlock = 'block-' + nameBlock;
-        idBlock = getBlockId(classBlock);
-        bl = '<div id="' + idBlock + '" class="' + classBlock + ' block active nosave">' + content + '</div>';
-        $('.ant-wrap').append(bl);
-
-        $('.setting-block').hide();
-    }
-
-    $('.block').click(function () {
-        block = $(this).attr('id');
-
-        $('.active').removeClass('active');
-        $(this).addClass('active');
-    });
-
-    $('.ant-save-page').click(function () {
-        if( $('#'+block).hasClass('nosave') ) {
-            $('.nosave').removeClass('nosave');
-            nameBlock = block.replace(/\-\d+/, '');
-
-            if (nameBlock == 'slider') {
-                saveCrop();
-            }
-        }
-
-        savePage();
-    });
-
-    block = $('.block.active').attr('id');
-    if( $('#'+block).hasClass('block-slider') ){
-        selectSlider(block);
-    }
-
-    // перемещение блоков
-    $( function() {
-        $( "#sortable" ).sortable();
-        $( "#sortable" ).disableSelection();
-    });
-
-    $('.switch-setting').click(function () {
-        //alert(2)
-        if($(this).attr('name') == 'page'){
-            $(this).attr('name', 'block');
-            $(this).text('Настройки блока');
+        },
+        block: function () {
+            $('.switch-setting').attr('name', 'block');
+            $('.switch-setting span').text('Настройка блока');
             $('.set-block').show();
             $('.set-page').hide();
-        }else{
-            $(this).attr('name', 'page');
-            $(this).text('Настройки страницы');
+            let nameBlock = block.replace(/\-\d+/, '');
+
+            $('.setting-block').hide();
+            $('#setting-'+nameBlock).show();
+        },
+        page: function () {
+            $('.switch-setting').attr('name', 'page');
+            $('.switch-setting span').text('Настройки страницы');
             $('.set-block').hide();
             $('.set-page').show();
+        },
+        click: function () {
+            if (block == undefined) {
+                ferrors.runEffect('Нет выбранного блока', 'info');
+                return false;
+            }
+
+            if($(this).attr('name') == 'block'){
+                isblock.val(0);
+                pageOrBlock.page();
+                $(this).attr('name', 'page');
+            }else{
+                isblock.val(1);
+                pageOrBlock.block();
+                $(this).attr('name', 'block');
+            }
         }
+    }
+
+    $('.switch-setting').on( 'click', pageOrBlock.click );
+
+    let addBlock = {
+        getBlockId: function (classBlock) {
+            let n = -1;
+
+            $('.ant-wrap').find('.' + classBlock).each(function () {
+                let n1 = $(this).attr('id').match(/\d+/) * 1;
+                if (n1 > n) {
+                    n = n1;
+                }
+            });
+            n++;
+
+            block = classBlock.replace('block-', '') + '-' + n;
+            return block;
+        },
+        add: function (classBlock) {
+            $('.ant-wrap .nosave').remove();
+            $('.ant-wrap .block').removeClass('active');
+
+            idBlock = this.getBlockId(classBlock);
+            $('.blocks .' + classBlock).clone().appendTo('.ant-wrap').attr('id', idBlock).addClass(classBlock);
+
+            $('.setting-block').hide();
+            this.settingBlock();
+        },
+        settingBlock: function () {
+            $('.switch-setting').attr('name', 'block');
+            $('.switch-setting span').text('Настройки блока');
+            $('.set-block').show();
+            $('.set-page').hide();
+            $('.setting-block').hide();
+        },
+        $button: function () {
+            addBlock.add('block-button');
+            $('#setting-button').show();
+            select.button();
+        },
+        $text: function () {
+            addBlock.add('block-text');
+            $('#setting-text').show();
+            tinymce.get("mytextarea").setContent('Новый текстовый блок');
+        },
+        $video: function () {
+            //this.settingBlock();
+            addBlock.add('block-video');
+            $('#url-video').val('');
+            $('#setting-video').show();
+        },
+        $map: function () {
+            addBlock.add('block-map');
+            //$('#'+block).removeAttr('id').find('.inmap').attr('id', block);
+            map.geo('55.75322', '37.622513', block);
+            $('#setting-map').show();
+        },
+        $separator: function () {},
+        $faq: function () {},
+        $slider: function () {
+            addBlock.add('block-slider');
+            $('#setting-slider').show();
+        },
+        $timer: function () {},
+        $network: function () {},
+        $messenger: function () {},
+    }
+
+    $('ul.sidebar').find('li').each(function () {
+        let cl = '$' + $(this).attr('class').replace('nav-item simple sb-', '');
+        $(this).on( 'click', addBlock[cl] );
     });
 
-    let opt = cookie.get('save');
-    opt = (opt == 'page') ? 'block' : 'page';
-    $('.switch-setting').click();
+    $('.ant-save-page').on( 'click', savePage );
 
-    function savePage(){
+    function savePage() {
+        if (block != undefined) {
+            nameBlock = block.replace(/\-\d+/, '');
+            if (ferrors[nameBlock]() == false) {
+                $('.indicator').hide();
+                return false;
+            }
+        }
+
+        $('.ant-wrap .move-block').remove();
+        $('.ant-wrap .nosave').removeClass('nosave');
+
         opt = $('.switch-setting').attr('name');
-        cookie.set('save', opt);
+
 
         ht = $('.ant-wrap').html();
         $('input[name="page"]').val(ht);
 
-        cpt = $('#page-caption').val();
+        cpt = $pageCaption.val();
         $('input[name="caption"]').val(cpt);
 
-        bg = $('.full-page').css('backgroundColor');
+        bg = $fullPage.css('backgroundColor');
         $('input[name="bgcolor"]').val(bg);
 
-        showPage = ( $('.toggle-switch-input').prop('checked') == true) ? 1 : 0;
-        alert(showPage)
+        showPage = ($('.toggle-switch-input').prop('checked') == true) ? 1 : 0;
         $('input[name="show-page"]').val(showPage);
+
+        if($('.switch-setting').attr('name') == 'block'){
+            let nameBlock = block.replace(/\-\d+/, '');
+            $('input[name="block"]').val(nameBlock);
+        }
 
         $('#formPage').submit();
     }
-    // end common
-    // slider ------------------------------
-    // добавляет пустой блок слайдера
-    $('.sb-slider').click(function () {
-        $('.nosave').remove();
-        block = getBlockId('block-slider');
 
-        content = '<img class="ant-imgstart" src="/web/img/add_image.png" width="100%">';
+    $('.ant-delete-page').click(function () {
+        sel = '.sb-' + block.replace(/\-\d+/, '') + ' .label';
+        nm = $(sel).text();
+        $('.ant-mod-label').text('Удаление модуля');
+        $('.ant-mod-text').text('Вы действительно хотите удалить блок "' + nm + '"?');
 
-        addBlock('slider', content);
-        $('.wrap-input').empty();
-        $('#setting-slider').show();
-        $('.set-page').hide();
-        $('.set-block').show();
-    });
-
-    // выбор определенного слайдера и его настройки
-    $(".ant-wrap").on("click", ".block-slider", function () {
-        block = $(this).attr('id');
-        selectSlider(block);
-    });
-    function selectSlider(block){
-        $('#setting-slider').show();
-        $('.wrap-input').empty();
-
-        $('#'+block).find('.swiper-slide').each(function (i) {
-            var el = $('.template .el-input').clone().appendTo('.wrap-input');
-            nm = $(this).attr('src').split('/');
-            el.find('input').val(nm[nm.length - 1]);
+        let modal = new Custombox.modal({
+            content: {
+                effect: 'fadein',
+                target: '#b2'
+            }
         });
-    }
 
-    // инициализация слайдера ро id
-    function initSlider(n, id, centr) {
-        let p = id.split('-')[1];
-        let el = $('#pagin-'+p);
-        l = el.find('span').length;
-        (l > 1) ? el.show() : el.hide();
-        (l > 1) ? el.css('margin', '20px 0') : el.css('margin', '0px');
-
-        var swiper = new Swiper('#' + id, {
-            slidesPerView: n,
-            spaceBetween: 30,
-            centeredSlides: centr,
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-            pagination: {
-                el: el,
-                clickable: true,
-            },
-        });
-    }
-
-    // инициализация всех слайдеров на странице
-    $('.ant-wrap').find('.block-slider').each(function (i) {
-        center = ($(this).find('.swiper-slide').length == 1) ? true : false;
-        initSlider(2, $(this).attr('id'), center);
+        modal.open();
     });
 
-    // сохраняет обрезанное фото на сервер и если успешно сохраняет страницу
-    function saveCrop() {
-        cropper.getCroppedCanvas().toBlob((myfile) => {
-            const formData = new FormData();
-            formData.append('croppedImage', myfile/*, 'example.png' */);
+    $('.bl-pg-remove').on('click', function () {
+        el = $('#removePageBlock');
+        action = $('.switch-setting').attr('name');
+        pid = id = window.location.pathname.split('/')[2];
 
-            $.ajax('', {
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success(data) {
-                    data = JSON.parse(data);
-                    console.log(data)
-                    $('.temp').attr('src', data.dir + '/' + data.name);
-                    $('.temp').attr('name', data.name);
-                    $('.temp').removeClass('temp');
-                    $('.nosave').removeClass('nosave');
-
-                    savePage();
-                },
-            });
-        })
-    }
-
-    // добавление фото в определенный блок
-    function addImageSlider() {
-        bl = $('#' + block);
-        bl.addClass('nosave');
-
-        if (bl.find('.temp') != undefined) {
-            bl.find('.temp').remove();
-        }
-
-        if (bl.hasClass('swiper-container')) {
-            el = '<img class="swiper-slide temp" src="" />';
-            bl.find('.swiper-wrapper').append(el);
+        page = (action == 'page') ? '' : $('.ant-wrap').html();
+        if (action == 'page') {
+            page = setting = '';
         } else {
-            $('.ant-imgstart').remove();
-            bl.addClass('swiper-container');
-            el = '<div class="swiper-wrapper"><img class="swiper-slide temp" src="" /></div>';
-            bl.append(el);
-
-            p = block.split('-')[1];
-            el = '<div id="pagin-' + p + '" class="swiper-pagination"></div>';
-            bl.append(el);
+            $('#' + block).remove();
+            page = $('.ant-wrap').html();
         }
 
-        cropper.getCroppedCanvas().toBlob((myfile) => {
-            let reader = new FileReader();
-            reader.readAsDataURL(myfile);
-            reader.onload = function () {
-                bl.find('.temp').attr('src', reader.result);
-            }
-        })
-
-        centr = (bl.find('.swiper-slide').length == 1) ? true : false;
-
-        initSlider(2, block, centr);
-        Custombox.modal.close();
-    }
-
-    // удаляет фото из блока слайдера
-    $("#setting-slider").on("click", ".img-close", function () {
-        nm = $(this).parent().find('input').val();
-        id = window.location.pathname.split('/')[2];
-        els = $('#' + block).find('.swiper-slide');
-        leng = els.length;
-
-        els.each(function (i) {
-            if ($(this).attr('src').indexOf(nm) != -1) {
-                (leng == 1) ? $('#' + block).remove() : $(this).remove();
-            }
-        });
-        page = $('.ant-wrap').html();
-
-        $('input[name="name"]').val(nm);
-        $('input[name="page_id"]').val(id);
-        $('input[name="page"]').val(page);
-        $('#removeImg').submit();
+        el.find('input[name="action"]').val(action);
+        el.find('input[name="page_id"]').val(pid);
+        el.find('input[name="page"]').val(page);
+        el.submit();
     });
 
-    // end slider ------------------------------
-    //alert(block);
+
+    function init() {
+        let h = $('.block-menu-2').height();
+        $('.full-page').css('height', h + 'px');
+        str = ferrors.getOrder();
+        options['move1'] = options['move2'] = str;
+    }
+    init();
+
+    $(document).on('click', '.wrap-header', function(e){
+        $buttonBgColor.asColorPicker('set', '#ff0000');
+        $buttonBgColor.asColorPicker('opacity', 0.4);
+
+        asdf=$buttonBgColor.asColorPicker('opacity');
+    });
+
 });
 
-/*
- * cookie javascript library v 0.2
- * http://code.google.com/p/jscookie/
- *
- * Copyright (c) 2009 Evgeniy Tyurin
- * Licensed under the GPL licenses
- * http://www.gnu.org/licenses/gpl-3.0.txt
- *
- * Date: 2009-11-03 15:48:12
- */
-
-window.cookie =
-    {
-        set: function (key, value, expires, path, domain, secure) {
-            var sCookie = key + '=' + escape(value) + '; ';
-
-            if (expires !== undefined) {
-                var date = new Date();
-                date.setTime(date.getTime() + (expires * 24 * 60 * 60 * 1000));
-                sCookie += 'expires=' + date.toGMTString() + '; ';
-            }
-
-            sCookie += (path === undefined) ? 'path=/;' : 'path=' + path + '; ';
-            sCookie += (domain === undefined) ? '' : 'domain=' + domain + '; '
-            sCookie += (secure === true) ? 'secure; ' : '';
-
-            document.cookie = sCookie;
-        },
-
-        get: function (sKey) {
-            var sValue = '';
-            var sKeyEq = sKey + '=';
-            var aCookies = document.cookie.split(';');
-
-            for (var iCounter = 0, iCookieLength = aCookies.length; iCounter < iCookieLength; iCounter++) {
-                while (aCookies[iCounter].charAt(0) === ' ') {
-                    aCookies[iCounter] = aCookies[iCounter].substring(1);
-                }
-                if (aCookies[iCounter].indexOf(sKeyEq) === 0) {
-                    sValue = aCookies[iCounter].substring(sKeyEq.length);
-                }
-            }
-
-            return unescape(sValue);
-        },
-
-        remove: function (key) {
-            cookie.set(key, '', -1);
-        },
-
-        clear: function () {
-            var aCookies = document.cookie.split(';');
-
-            for (var iCounter = 0, iCookieLength = aCookies.length; iCounter < iCookieLength; iCounter++) {
-                while (aCookies[iCounter].charAt(0) === ' ') {
-                    aCookies[iCounter] = aCookies[iCounter].substring(1);
-                }
-                var iIndex = aCookies[iCounter].indexOf('=', 1);
-                if (iIndex > 0) {
-                    cookie.set(aCookies[iCounter].substring(0, iIndex), '', -1);
-                }
-            }
-        },
-
-        isEnabled: function () {
-            cookie.set('test_cookie', 'test');
-
-            var val = (cookie.get('test_cookie') === 'test') ? true : false;
-
-            cookie.remove('test_cookie');
-
-            return val;
-        }
-    };
 
 

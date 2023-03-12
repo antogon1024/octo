@@ -22,8 +22,11 @@ GeneratorAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--<script src="https://api-maps.yandex.ru/2.1/?apikey=b18e1a55-f988-4079-b0b6-3ae62da2676b&lang=ru_RU" type="text/javascript">
+    </script>-->
 </head>
 <body class="d-flex flex-column h-100">
+<div class="ttt" style="position: absolute;z-index: 10000;text-align: center">a</div>
 <?php $this->beginBody() ?>
 
 <header>
@@ -61,6 +64,7 @@ GeneratorAsset::register($this);
         <?= $content ?>
     </div>
 </main>
+<div style="padding: 30px"></div>
 <?php $this->endBody() ?>
 </body>
 </html>

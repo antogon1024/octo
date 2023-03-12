@@ -20,11 +20,12 @@ class GeneratorAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/generator.css',
         'css/custombox.min.css',
+        'css/generator.css',
         'css/cropper.css',
         'css/swiper.css',
         'css/asColorPicker.css',
+        'css/jquery.minicolors.css',
         //'css/theme.min.css',
         //'css/font-awesome.min.css',
     ];
@@ -34,12 +35,11 @@ class GeneratorAsset extends AssetBundle
         'js/custombox.min.js',
         'js/swiper.js',
         'js/jqui.js',
-        //'js/jq.js',
-        'js/jquery-asColor.js',
-        'js/jquery-asGradient.min.js',
-        'js/jquery-asColorPicker.js',
+        'js/jquery.ui.touch-punch.min.js',
+        'js/jquery.minicolors.js',
+        'js/jscolor.js',
         'js/test.js',
-
+        'js/tinymce/tinymce.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
