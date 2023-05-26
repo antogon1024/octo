@@ -2972,6 +2972,7 @@ var jsc = {
 
 
 		function onValueChange (ev) {
+			return; // ant моя правка
 			if (jsc.getData(ev, 'internal')) {
 				return; // skip if the event was internally triggered by jscolor
 			}

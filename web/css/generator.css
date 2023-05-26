@@ -215,6 +215,11 @@
 }
 .bl-save{
     margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+.bl-save button{
+    width: 48%;
 }
 .navbar-brand img{
     min-width: 7rem;
@@ -401,6 +406,9 @@
 .block *{
     border-radius: 10px;
 }
+.block-separator{
+    border: none;
+}
 /*end blocks*/
 /*slider*/
 .input-slider{
@@ -474,6 +482,39 @@
     height: 100%;
 }
 /*end block video*/
+.block-separator{
+    text-align: center;
+}
+.ant-q{
+    position: relative;
+    height: 3em;
+}
+.ui-accordion-header-icon {
+    content: '';
+    position: absolute;
+    top: 16px;
+    right: 10px;
+    display: inline-block;
+    width: 20px;
+    height: 13px;
+    color: #377dff;
+}
+.add-q, .del-q{
+    width: 100%;
+}
+.add-q{
+    margin-top: 10px;
+    margin-bottom: 26px;
+}
+.active-question{
+    color: red;
+}
+.block-faq{
+    background: white;
+}
+.timer-size{
+    font-size: 40px;
+}
 
 
 

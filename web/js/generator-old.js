@@ -201,9 +201,9 @@ jQuery(document).ready(function ($) {
         $('.d-block').text('Страница не активна');
     }
 
-    $("#page-background").asColorPicker({
+    /*$("#page-background").asColorPicker({
         mode: 'simple',
-    });
+    });*/
 
     $("body").on("click", ".asColorPicker-saturation, .asColorPicker-hue, .asColorPicker-alpha", function () {
         rgb = $('.asColorPicker-trigger span').css('backgroundColor');
@@ -225,9 +225,9 @@ jQuery(document).ready(function ($) {
 
     let rgb = $('.full-page').css('backgroundColor');
 
-    if(rgb != 'rgba(0, 0, 0, 0)'){
+    /*if(rgb != 'rgba(0, 0, 0, 0)'){
         $("#page-background").asColorPicker('set', rgb);
-    }
+    }*/
 
     hex = rgb2hex(rgb);
 

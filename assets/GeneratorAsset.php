@@ -26,6 +26,7 @@ class GeneratorAsset extends AssetBundle
         'css/swiper.css',
         'css/asColorPicker.css',
         'css/jquery.minicolors.css',
+        'css/daterangepicker.css'
         //'css/theme.min.css',
         //'css/font-awesome.min.css',
     ];
@@ -38,8 +39,11 @@ class GeneratorAsset extends AssetBundle
         'js/jquery.ui.touch-punch.min.js',
         'js/jquery.minicolors.js',
         'js/jscolor.js',
-        'js/test.js',
+        //'js/test.js',
         'js/tinymce/tinymce.min.js',
+        'js/tinymce/jquery.tinymce.min.js',
+        'js/moment.min.js',
+        'js/daterangepicker.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

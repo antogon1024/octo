@@ -1067,14 +1067,14 @@ jQuery(document).ready(function ($) {
         $('.switch-setting').click();
     }
     //----------------
-    if(block != undefined) {
+    /*if(block != undefined) {
         //alert(block)
         let nameBlock = block.replace(/\-\d+/, '');
         $('.setting-block').hide();
         $('#setting-'+nameBlock).show();
         //select.click();
         //$labelButton.val('aaaaa');
-    }
+    }*/
 
     // endinit-----------------------
 

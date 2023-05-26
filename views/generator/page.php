@@ -101,7 +101,7 @@ use yii\widgets\ActiveForm;
         </div>
 
         <div class="col-lg-6 2col-md-8 block-content-2 block-type">
-            <div class="full-page" style="background: <?= $page->bgcolor ?>">
+            <div class="full-page" style="background: <?= $page->bgcolor ?>" data-bg ="<?= $page->bgcolor ?>">
                 <div class="block-header">
                     <div class="wrap-header">
                         <img class="img-header" src="<?= $header ?>" alt="">
@@ -147,18 +147,16 @@ use yii\widgets\ActiveForm;
 
                     <?php ActiveForm::end(); ?>
                 </div>
-                <?php if ($page->caption): ?>
-                    <h3 class="pg-caption"><?= $page->caption ?></h3>
-                <?php endif; ?>
+                <h3 class="pg-caption"><?= $page->caption ?></h3>
 
                 <div id="sortable" class="ant-wrap" data-switch="page">
                     <?= $page->page ?>
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 2col-md-8 block-setting-2 block-type">
+        <div class="col-lg-3 2col-md-8 block-setting-2 block-type" style="padding-top: 10px">
             <div>
-                <?php if($page->block == ''): ?>
+                <?php if($page->block == ''): ?> <!--a1-->
                     <button type="button" class="btn btn-outline-primary switch-setting" name="page">
                         <i class="fa fa-cog"></i><span>Настройка страницы</span>
                     </button>
@@ -179,18 +177,19 @@ use yii\widgets\ActiveForm;
                     </div>
 
                     <div class="form-group page-caption">
-                        <label for="url-page">Заголовок страницы</label>
-                        <input type="text" class="form-control" id="page-caption" placeholder="">
+                        <label for="pageCaption">Заголовок страницы</label>
+                        <input type="text" class="form-control" id="pageCaption" placeholder="" data-etype="pageCaption" value="<?= $page->caption ?>">
                     </div>
 
                     <div class="form-group page-background">
+                        <div class="form-control validate" style="position:absolute;width:32px;height:32px;right:1px;top:35px;border:none;"></div>
                         <label for="url-page">Цвет фона</label>
-                        <input type="text" class="form-control" id="page-background" data-type="pageBg">
+                        <input type="text" class="form-control" id="pageBackground" data-etype="pageBackground" value="<?= $page->bgcolor ?>">
                     </div>
 
                     <label class="toggle-switch d-flex align-items-center mb-3" for="customSwitchDefaultSize">
                         <input type="checkbox" class="toggle-switch-input change-input"
-                               id="customSwitchDefaultSize"<?= $checked ?>>
+                               id="customSwitchDefaultSize" <?= $checked ?> data-etype="customSwitchDefaultSize">
                         <span class="toggle-switch-label">
                             <span class="toggle-switch-indicator"></span>
                         </span>
@@ -201,30 +200,37 @@ use yii\widgets\ActiveForm;
                 </form>
             </div>
 
+            <!---->
+            <!---->
+
             <div class="set-block" style="<?=$arBlock['setBlock']?>">
-                <label class="input-label">Перемещения блоков</label>
-                <div class="form-group">
-                    <label class="toggle-switch d-flex align-items-center mb-3"
-                           for="switch-move" style="margin-top: 0">
-                    <input type="checkbox" class="toggle-switch-input change-input"
-                           id="switch-move">
-                    <span class="toggle-switch-label">
+                <?php if($page->num_block > 1): ?>
+                    <div class="wrap-move">
+                        <label class="input-label">Перемещения блоков</label>
+                        <div class="form-group">
+                            <label class="toggle-switch d-flex align-items-center mb-3"
+                                   for="switch-move" style="margin-top: 0">
+                                <input type="checkbox" class="toggle-switch-input change-input"
+                                       id="switch-move">
+                                <span class="toggle-switch-label">
                         <span class="toggle-switch-indicator"></span>
                     </span>
-                    <span class="toggle-switch-content2" style="margin-left: 10px;">
+                                <span class="toggle-switch-content2" style="margin-left: 10px;">
                         <span class="d-block2">выключено</span>
                     </span>
-                    </label>
-                </div>
+                            </label>
+                        </div>
+                    </div>
+                <?php endif; ?>
 
 
-                <div id="setting-button" class="setting-block" style="<?=$arBlock['button']?>">
+                <div id="setting-button" class="setting-block" style="<?=$arBlock['button']?>"><!--a1-->
                     <div class="form-group">
                         <label for="urlButton">URL Ссылки:</label>
-                        <input type="text" class="form-control validate" placeholder="https://" id="urlButton" data-type="url">
+                        <input type="text" class="form-control validate" placeholder="https://" id="urlButton" data-etype="url">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control validate" id="labelButton" value="Текст в кнопке" data-type="label">
+                        <input type="text" class="form-control validate" id="labelButton" value="Текст в кнопке" data-etype="label">
                     </div>
 
                     <label for="" class="input-label">Размер кнопки</label>
@@ -232,7 +238,7 @@ use yii\widgets\ActiveForm;
                         <div class="form-control" style="float: left;width: 50%">
                             <div class="custom-control custom-radio">
                                 <input type="radio" class="custom-control-input change-input" name="button-radio"
-                                       id="radio2" value="radio2" data-type="size" checked>
+                                       id="radio2" value="radio2" data-etype="size" checked>
                                 <label class="custom-control-label" for="radio2">Стандарт</label>
                             </div>
                         </div>
@@ -240,7 +246,7 @@ use yii\widgets\ActiveForm;
                         <div class="form-control" style="float: left;width: 50%;">
                             <div class="custom-control custom-radio">
                                 <input type="radio" class="custom-control-input change-input" name="button-radio"
-                                       id="radio3" value="radio3" data-type="size">
+                                       id="radio3" value="radio3" data-etype="size">
                                 <label class="custom-control-label" for="radio3">Большая</label>
                             </div>
                         </div>
@@ -255,7 +261,7 @@ use yii\widgets\ActiveForm;
                     <div class="form-group" style="position: relative">
                         <div class="form-control validate" style="position:absolute;width:32px;height:32px;right:1px;top:35px;border:none;"></div>
                         <label for="buttonFontColor">Цвет шрифта:</label>
-                        <input type="text" class="form-control" id="buttonFontColor" data-etype="color" value="ffffffff">
+                        <input type="text" class="form-control validate" id="buttonFontColor" data-etype="color" value="ffffffff">
                     </div>
 
 
@@ -272,21 +278,44 @@ use yii\widgets\ActiveForm;
                 <div id="setting-video" class="setting-block" style="<?=$arBlock['video']?>">
                     <div class="form-group">
                         <label for="url-button">URL Видео:</label>
-                        <input type="text" class="form-control" placeholder="https://youtube.com" id="url-video">
+                        <input type="text" class="form-control validate" placeholder="https://youtube.com" id="urlVideo">
                     </div>
                 </div>
                 <div id="setting-map" class="setting-block" style="<?=$arBlock['map']?>">
                     <div class="form-group">
                         <label for="url-button">Место на карте:</label>
-                        <input type="text" class="form-control geo-search">
+                        <input id="geoSearch" type="text" class="form-control geo-search" data-etype="region">
                         <i class="geo-close fa fa-remove"></i>
                         <div class="map-region"></div>
                     </div>
                 </div>
-                <div id="setting-split" class="setting-block"></div>
-                <div id="setting-faq" class="setting-block"></div>
-                <div id="setting-button" class="setting-block"></div>
+                <div id="setting-separator" class="setting-block">
+                    <div class="form-group" style="position: relative">
+                        <div class="form-control validate" style="position:absolute;width:32px;height:32px;right:1px;top:35px;border:none;"></div>
+                        <label for="colorSeparator">Цвет разделителя:</label>
+                        <input type="text" class="form-control validate" id="colorSeparator" data-etype="color" value="ccccccff">
+                    </div>
 
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="labelSeparator" value="Надпись в разделителе" data-etype="label">
+                    </div>
+                </div>
+                <div id="setting-faq" class="setting-block">
+                    <div class="form-group">
+                        <label for="faqQuestion">Вопрос:</label>
+                        <input type="text" class="form-control validate" id="faqQuestion" data-etype="question">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="faqAnswer">Ответ:</label>
+                        <textarea type="text" class="form-control validate" id="faqAnswer" rows="10" data-etype="answer">
+                        </textarea>
+
+                    </div>
+                    <button type="button" class="btn btn-outline-primary add-q">Добавить вопрос</button>
+                    <button type="button" class="btn btn-outline-danger del-q">Удалить вопрос</button>
+
+                </div>
                 <div id="setting-slider" class="setting-block" style="<?=$arBlock['slider']?>">
                     <label type="button" class="btn btn-outline-primary 22ant-save-page custom-file-upload">
                         <?= Html::activeInput('file', $slider, 'image', ['id' => 'slider', 'class' => 'input-slider']) ?>
@@ -294,6 +323,16 @@ use yii\widgets\ActiveForm;
                     </label>
 
                     <div class="wrap-input"></div>
+                </div>
+                <div id="setting-timer" class="setting-block">
+                    <div class="form-group">
+                        <label for="startTimer">Старт:</label>
+                        <input type="text" class="form-control validate" id="startTimer" data-etype="timer">
+                    </div>
+                    <div class="form-group">
+                        <label for="endTimer">Конец:</label>
+                        <input type="text" class="form-control validate" id="endTimer" data-etype="timer">
+                    </div>
                 </div>
             </div>
 
@@ -308,7 +347,7 @@ use yii\widgets\ActiveForm;
 
 <div style="display: none">
     <div id="b4" class="b4 ant-size" style="width:600px;padding: 0 50px;display: none;background: #000000;margin-top: 0px">
-        <div class="top-ava">Выберите область фотографии<i class="fa fa-remove nav-icon"></i></div>
+        <div class="top-ava">Выберите область фотографии<i class="fa fa-remove nav-icon combo-remove"></i></div>
         <div>
             <img id="ant-crop2" class="ant-size" src="" style="max-width: 100%;2height: 100%">
         </div>
@@ -321,7 +360,7 @@ use yii\widgets\ActiveForm;
 
 
     <div id="b2" class="b2 ant-div-3 card" style="display: none">
-        <i class="fa fa-remove nav-icon"></i>
+        <i class="fa fa-remove nav-icon combo-remove"></i>
         <div class="ant-bl-mes">
             <p class="ant-mod-label"></p>
             <p class="ant-mod-text"></p>
@@ -339,20 +378,25 @@ use yii\widgets\ActiveForm;
         <input type="hidden" name="show-page">
         <input type="hidden" name="caption">
         <input type="hidden" name="setting">
-        <input type="hidden" name="block">
+        <input type="hidden" name="block"> <!-- a1 -->
+        <input type="hidden" name="num-block">
     </form>
 
     <form id="removeImg" action="/generator/remove-img" method="post">
         <input type="hidden" name="name">
         <input type="hidden" name="page_id">
         <input type="hidden" name="page">
+        <input type="hidden" name="block">
+        <input type="hidden" name="num-block">
     </form>
 
     <form id="removePageBlock" action="/generator/remove-page" method="post">
         <input type="hidden" name="action">
         <input type="hidden" name="page_id">
         <input type="hidden" name="page">
-        <input type="hidden" name="setting">
+        <!--<input type="hidden" name="setting">-->
+        <input type="hidden" name="block">
+        <input type="hidden" name="num-block">
     </form>
 
     <div class="template">
@@ -364,30 +408,57 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="blocks">
+        <div class="page-block" data-pageBackground="<?= $page->bgcolor ?>" data-pageCaption="<?= $page->caption ?>" data-customSwitchDefaultSize="<?= $page->show_page ?>"></div>
         <div class="mover">
             <i class="fa fa-arrows-v"></i>
         </div>
         <div class="active-block">
-            <div style="padding: 10px; background: red; border-radius: 10px; z-index: 10000;"></div>
+            <div style="padding: 10px; background: red; border-radius: 10px; z-index: 100000;">ddd</div>
         </div>
 
-        <div class="block-button block active nosave" data-bg="#007bff" data-color="#ffffff" data-url="" data-label="Текст в кнопке" data-size="radio2">
+        <div class="block-button block active nosave" data-bg="#007bffff" data-color="#ffffffff" data-url="aa.aa" data-label="Текст в кнопке" data-size="radio2">
             <button type="button" class="btn" style="width:100%; background: #007bff; color: white">Текст в кнопке
             </button>
         </div>
         <div class="block-text block active nosave">
-            <div class="block-content" style="padding: 20px">Новый текстовый блок</div>
+            <div class="block-content" style="padding: 20px"><p>Новый текстовый блок</p></div>
         </div>
-        <div class="block-video active block nosave video">
+        <div class="block-video active block nosave video" data-urlVideo="">
             <img class="screensaver" src="/web/img/youtube.png" width="100%">
-            <div class="move-block2"></div>
-        </div>
-        <div class="block-map active block nosave" style="overflow: hidden;width: 100%;height: 300px;">
-            <!--<div class="inmap" style="height: 300px;width: 100%"></div>-->
             <!--<div class="move-block2"></div>-->
         </div>
+        <div class="block-map active block nosave" style="overflow: hidden;width: 100%;height: 300px;" data-region="Россия, Москва"
+             data-a="55.75322" data-b="37.622513">
+            <div class="move-block2"></div>
+        </div>
+
+        <div class="block-separator block active nosave"
+             style="display: flex; align-items: center; align-content: space-between; height: 44px" data-color="#ccccccff" data-label="Надпись в разделителе">
+            <div class="bg-separator" style="background: #ccc; height: 1px; width: 100%"></div>
+            <span style="padding: 0 15px;white-space: nowrap">Надпись в разделителе</span>
+            <div class="bg-separator" style="background: #ccc; height: 1px; width: 100%"></div>
+        </div>
+
+        <div id="" class="accordion accord block block-faq active nosave">
+            <p id="new-q" class="ant-q card-header active-question">Вопрос1</p>
+            <div id="new-a" class="ant-a card-body active-answer">Ответ1</div>
+        </div>
+
         <div class="block-slider block active nosave">
             <img class="ant-imgstart" src="/web/img/add_image.png" width="100%">
+        </div>
+
+        <div class="block-timer block active nosave">
+            <div class="card-body ant-timer" id="countdown2">
+                <table style="width: 100%">
+                    <tr>
+                        <td><span class="timer-size text-dark day">00</span> <span>d</span></td>
+                        <td><span class="timer-size text-dark hour">00</span> <span>h</span></td>
+                        <td><span class="timer-size text-dark minute">00</span> <span>m</span></td>
+                        <td><span class="timer-size text-dark second">00</span> <span>s</span></td>
+                    </tr>
+                </table>
+            </div>
         </div>
         <div class="move-block"
              style="position:absolute;width: 100%;height:100%;z-index: 1000;top: 0;left: 0;background: blue;opacity: 0.3"></div>
@@ -404,21 +475,7 @@ use yii\widgets\ActiveForm;
      style="display: none; padding: 10px; background: red; border-radius: 10px; position: fixed; top: 20px; right: 20px; z-index: 10000"></div>
 
 <script type="text/javascript">
-    //var ymaps;
-    /*function geo2(a, b, id) {
-        ymaps.ready(init);
-        function init() {
-            var myMap = new ymaps.Map(id, {
-                    center: [a, b],
-                    zoom: 8,
-                    controls: []
-                }, {
-                    searchControlProvider: 'yandex#search'
-                }),
-                myPlacemark = new ymaps.Placemark([a, b], {});
-            myMap.geoObjects.add(myPlacemark);
-        }
-    }*/
+
 </script>
 
 

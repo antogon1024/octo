@@ -87,6 +87,7 @@ class GeneratorController extends Controller
                 $page->caption = trim( Yii::$app->request->post()['caption'] );
                 $page->setting = trim( Yii::$app->request->post()['setting'] );
                 $page->block = trim( Yii::$app->request->post()['block'] );
+                $page->num_block = trim( Yii::$app->request->post()['num-block'] );
                 $page->save(false);
             }
 
@@ -119,6 +120,7 @@ class GeneratorController extends Controller
             'avatar' => $avatar,
             'url' => $host . $url,
             'url2' => $url,
+            'host' => Yii::$app->request->hostInfo,
             'arBlock' => $arBlock,
         ]);
     }
@@ -136,6 +138,8 @@ class GeneratorController extends Controller
             }
             $page = Page::findOne($id);
             $page->page = trim( $post['page'] );
+            $page->block = trim( $post['block'] );
+            $page->num_block = trim( $post['num-block'] );
             $page->save(false);
             return $this->redirect('/generator/' . $id);
         }
@@ -149,7 +153,8 @@ class GeneratorController extends Controller
 
             if($post['action'] == 'block'){
                 $page->page = trim( $post['page'] );
-                $page->setting = trim( $post['setting'] );
+                $page->block = trim( $post['block'] );
+                $page->num_block = trim( $post['num-block'] );
                 $page->save(false);
                 return $this->redirect('/generator/' . $post['page_id']);
             }else{
@@ -177,6 +182,8 @@ class GeneratorController extends Controller
 
     public function actionMyPages()
     {
+        $this->layout = 'mypages';
+
         if(Yii::$app->user->isGuest){
             return $this->redirect(['/logout']);
         }
